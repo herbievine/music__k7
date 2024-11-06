@@ -1,7 +1,8 @@
 {
   "name": "music__k7",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "build": "bun build src/index.ts --target=node --minify --outdir=out"
   },
   "dependencies": {
     "archiver": "^7.0.1",
@@ -9,7 +10,6 @@
   },
   "devDependencies": {
     "@types/archiver": "^6.0.3",
-    "@types/bun": "latest",
-    "@types/node": "^22.9.0"
+    "@types/bun": "latest"
   }
 }
