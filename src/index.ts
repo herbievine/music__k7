@@ -10,6 +10,8 @@ export async function getArrayBuffer(link: string, init?: RequestInit) {
   return response.arrayBuffer();
 }
 
+app.get("/", async (c) => c.text(":)"));
+
 app.get("/download/:id", async (c) => {
   const id = c.req.param("id");
   const res = await fetch(`https://haxel.herbievine.com/download/album/${id}`);
