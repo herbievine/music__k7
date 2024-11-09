@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import * as archiver from "archiver";
+import archiver from "archiver";
 import { Readable } from "stream";
 
 const app = new Hono();
@@ -20,11 +20,16 @@ app.get("/download/:id", async (c) => {
     return c.json({ message: await res.text(), status: res.status }, 500);
   }
 
-  const { artist, songs } = await res.json();
+  const { album, artist, songs } = await res.json();
+
+  // c.header("Content-Type", "application/zip");
+  // c.header("Content-Disposition", `attachment; filename="${artist.name} - ${album.name}.zip"`);
 
   const archive = archiver("zip", { zlib: { level: 9 } });
 
   for (const song of songs) {
+    console.log(`Preparing ${song.name} (${song.trackNumber}/${album.trackCount})`);
+
     const arrayBuffer = await getArrayBuffer(`https://audio.herbievine.com/${song.bucketId}`, {
       headers: {
         "content-type": "audio/mpeg",
@@ -34,6 +39,8 @@ app.get("/download/:id", async (c) => {
     archive.append(Buffer.from(arrayBuffer), {
       name: `${artist.name} - ${song.name}.mp3`,
     });
+
+    console.log(`Zipped ${song.name} (${song.trackNumber}/${album.trackCount})`);
 
     continue;
   }
